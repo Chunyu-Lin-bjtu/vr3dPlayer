@@ -21,6 +21,18 @@
     <ClCompile Include="vr3dmesh.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="vr3drenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dscene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dnode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dcompositor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -29,13 +41,25 @@
     <ClInclude Include="glfwcallback.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="vr3dmesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dshader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3drenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dnode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dscene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dcompositor.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

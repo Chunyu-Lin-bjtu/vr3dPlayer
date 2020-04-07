@@ -150,14 +150,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vr3dcompositor.cpp" />
     <ClCompile Include="vr3dmesh.cpp" />
+    <ClCompile Include="vr3dnode.cpp" />
+    <ClCompile Include="vr3drenderer.cpp" />
+    <ClCompile Include="vr3dscene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
     <ClInclude Include="glfwcallback.h" />
-    <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="vr3dcompositor.h" />
     <ClInclude Include="vr3dmesh.h" />
+    <ClInclude Include="vr3dnode.h" />
+    <ClInclude Include="vr3drenderer.h" />
+    <ClInclude Include="vr3dscene.h" />
+    <ClInclude Include="vr3dshader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
