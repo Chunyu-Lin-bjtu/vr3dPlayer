@@ -8,6 +8,10 @@
 // 引入GLFW库
 #include "GLFW/glfw3.h"
 
+// 引入GLM库
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
 
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glfw3.lib")
