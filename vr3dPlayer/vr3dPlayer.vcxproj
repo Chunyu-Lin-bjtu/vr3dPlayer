@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="vr3dcamera.cpp" />
+    <ClCompile Include="vr3dcamera_arcball.cpp" />
     <ClCompile Include="vr3dcompositor.cpp" />
     <ClCompile Include="vr3dmesh.cpp" />
     <ClCompile Include="vr3dnode.cpp" />
@@ -160,6 +162,8 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="glfwcallback.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="vr3dcamera.h" />
+    <ClInclude Include="vr3dcamera_arcball.h" />
     <ClInclude Include="vr3dcompositor.h" />
     <ClInclude Include="vr3dmesh.h" />
     <ClInclude Include="vr3dnode.h" />

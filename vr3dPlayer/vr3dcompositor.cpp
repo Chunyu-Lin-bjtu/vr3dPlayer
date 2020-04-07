@@ -3,6 +3,7 @@
 #include "texture.h"
 
 #include "glfwcallback.h"
+#include "vr3dcamera_arcball.h"
 #include "vr3dcompositor.h"
 
 
@@ -34,7 +35,8 @@ vr3dcompositor::vr3dcompositor()
 	this->screen_w = 960;
 	this->screen_h = 540;
 
-	this->scene = new vr3dscene(&_init_scene);
+	vr3dcamera_arcball* cam = new vr3dcamera_arcball();
+	this->scene = new vr3dscene(cam, &_init_scene);
 }
 
 vr3dcompositor::~vr3dcompositor()

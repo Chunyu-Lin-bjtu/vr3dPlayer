@@ -1,7 +1,7 @@
 ﻿#include "vr3dscene.h"
 
 
-vr3dscene::vr3dscene(void (*_init_func) (vr3dscene*))
+vr3dscene::vr3dscene(vr3dcamera* cam, void (*_init_func) (vr3dscene*))
 {
 	this->gl_initialized = false;
 	node_draw_func = &vr_3d_node_draw;

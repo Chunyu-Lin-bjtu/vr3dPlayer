@@ -3,6 +3,7 @@
 #include <list>
 
 #include "vr3dnode.h"
+#include "vr3dcamera.h"
 
 // 引入GLM库
 #include <GLM/glm.hpp>
@@ -18,7 +19,7 @@ typedef void(*vr_3d_gl_init_func) (vr3dscene*);
 class vr3dscene
 {
 public:
-	vr3dscene(void (*_init_func) (vr3dscene*));
+	vr3dscene(vr3dcamera* cam, void (*_init_func) (vr3dscene*));
 	~vr3dscene();
 
 public:
@@ -29,11 +30,14 @@ public:
 	void vr_3d_scene_draw_nodes(glm::mat4* mvp);
 	void vr_3d_scene_draw();
 public:
+	
+	bool gl_initialized;
+	bool wireframe_mode;
+
 	vr_3d_node_draw_func node_draw_func;
 	vr_3d_gl_init_func   gl_init_func;
 
-	bool gl_initialized;
-	bool wireframe_mode;
+	vr3dcamera* camera;
 	list<vr3dnode*> nodes;
 };
 
