@@ -15,6 +15,7 @@ public:
 	~vr3dnode();
 
 public:
+	// 绘制坐标系
 	void vr_3d_node_new_debug_axes();
 
 	static vr3dnode* vr_3d_node_new_from_mesh_shader(vr3dmesh* mesh, vr3dshader* shader);

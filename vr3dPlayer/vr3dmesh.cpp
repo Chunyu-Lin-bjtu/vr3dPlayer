@@ -1,3 +1,8 @@
+ï»¿#include <string.h>
+#include <stdlib.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include "vr3dmesh.h"
 
 vr3dmesh::vr3dmesh()
@@ -8,18 +13,40 @@ vr3dmesh::~vr3dmesh()
 {
 }
 
-void vr3dmesh::vr_3d_mesh_new_plane(float aspect)
+// å¹³é¢
+void vr3dmesh::vr_3d_mesh_new_plane()
 {
 	vr_3d_mesh_init_buffers();
-	vr_3d_mesh_upload_plane(aspect);
+	vr_3d_mesh_upload_plane();
+}
+
+// ç«‹æ–¹ä½“
+void vr3dmesh::vr_3d_mesh_new_cube()
+{
+	vr_3d_mesh_init_buffers();      //åˆ›å»ºé¡¶ç‚¹ç¼“å­˜å¯¹è±¡ ç´¢å¼•ç¼“å­˜å¯¹è±¡(é¡¶ç‚¹åæ ‡çš„ç´¢å¼•)
+	vr_3d_mesh_upload_cube();
+}
+
+// çƒä½“
+void vr3dmesh::vr_3d_mesh_new_sphere(float radius, unsigned stacks, unsigned slices)
+{
+	vr_3d_mesh_init_buffers();       //åˆ›å»ºé¡¶ç‚¹ç¼“å­˜å¯¹è±¡ ç´¢å¼•ç¼“å­˜å¯¹è±¡(é¡¶ç‚¹åæ ‡çš„ç´¢å¼•)
+	vr_3d_mesh_upload_sphere(radius, stacks, slices);//çƒä½“ï¼Ÿå°†é¡¶ç‚¹åæ ‡æ•°æ®ï¼Œçº¹ç†åæ ‡æ•°æ®ï¼Œç´¢å¼•æ•°æ®æäº¤GPU
+}
+
+// çº¿
+void vr3dmesh::vr_3d_mesh_new_line(glm::vec3* from, glm::vec3* to, glm::vec3* color)
+{
+	vr_3d_mesh_init_buffers();      //åˆ›å»ºé¡¶ç‚¹ç¼“å­˜å¯¹è±¡ ç´¢å¼•ç¼“å­˜å¯¹è±¡(é¡¶ç‚¹åæ ‡çš„ç´¢å¼•)
+	vr_3d_mesh_upload_line(from, to, color);
 }
 
 void vr3dmesh::vr_3d_mesh_init_buffers()
 {
-	// ´´½¨²¢°ó¶¨VAO¶ÔÏó
+	// åˆ›å»ºå¹¶ç»‘å®šVAOå¯¹è±¡
 	glGenVertexArrays(1, &this->vao);
 	glBindVertexArray(this->vao);
-	// ´´½¨EBO¶ÔÏó
+	// åˆ›å»ºEBOå¯¹è±¡
 	glGenBuffers(1, &this->ebo);
 }
 
@@ -31,19 +58,19 @@ void vr3dmesh::vr_3d_mesh_bind_shader(vr3dshader* shader)
 	{
 		struct vr3dattributebuffer* buf = *it;
 		printf("%s: location: %d length: %d size: %zu", buf->name, buf->vbo, buf->vector_length, buf->element_size);
-		// ´´½¨VBO¶ÔÏó
+		// åˆ›å»ºVBOå¯¹è±¡
 		glBindBuffer(GL_ARRAY_BUFFER, buf->vbo);
 
 		GLint attrib_location = shader->vr_3d_get_attribute_location(buf->name);
 
 		if (attrib_location != -1) {
-			// Éè¶¨¶¥µãÊôĞÔÖ¸Õë ¸æËßOpenGL¸ÃÈçºÎ½âÎö¶¥µãÊı¾İ
-			glVertexAttribPointer(attrib_location, //index: ×ÅÉ«Æ÷±äÁ¿ÔÚ×ÅÉ«Æ÷ÖĞµÄÊôĞÔÎ»ÖÃÖµ
-				buf->vector_length, //size: Êı×éÖĞÃ¿¸ö¶¥µãĞèÒª¸üĞÂµÄ·ÖÁ¿ÊıÄ¿
-				GL_FLOAT,           //type: Êı×éÖĞÊı¾İµÄÀàĞÍ ÓĞGL_FLOAT¡¢GL_BYTE¡¢GL_INT µÈ
-				GL_FALSE,           //normalized: ÉèÖÃ¶¥µãÊı¾İÔÚ´æ´¢Ç°ÊÇ·ñĞèÒª¹éÒ»»¯   GL_FALSE:²»ĞèÒª¹éÒ»»¯
-				0, 0);              //stride:Á½¸öÔªËØÖ®¼äµÄ´óĞ¡Æ«ÒÆÖµ(byte)      pointer: Êı¾İÓ¦¸Ã´Ó»º´æ¶ÔÏóÄÄ¸öµØÖ·¿ªÊ¼»ñÈ¡
-			glEnableVertexAttribArray(attrib_location);//ÉèÖÃÆôÓÃÓÚindexË÷ÒıÏà¹ØÁªµÄ¶¥µãÊı×é
+			// è®¾å®šé¡¶ç‚¹å±æ€§æŒ‡é’ˆ å‘Šè¯‰OpenGLè¯¥å¦‚ä½•è§£æé¡¶ç‚¹æ•°æ®
+			glVertexAttribPointer(attrib_location, //index: ç€è‰²å™¨å˜é‡åœ¨ç€è‰²å™¨ä¸­çš„å±æ€§ä½ç½®å€¼
+				buf->vector_length, //size: æ•°ç»„ä¸­æ¯ä¸ªé¡¶ç‚¹éœ€è¦æ›´æ–°çš„åˆ†é‡æ•°ç›®
+				GL_FLOAT,           //type: æ•°ç»„ä¸­æ•°æ®çš„ç±»å‹ æœ‰GL_FLOATã€GL_BYTEã€GL_INT ç­‰
+				GL_FALSE,           //normalized: è®¾ç½®é¡¶ç‚¹æ•°æ®åœ¨å­˜å‚¨å‰æ˜¯å¦éœ€è¦å½’ä¸€åŒ–   GL_FALSE:ä¸éœ€è¦å½’ä¸€åŒ–
+				0, 0);              //stride:ä¸¤ä¸ªå…ƒç´ ä¹‹é—´çš„å¤§å°åç§»å€¼(byte)      pointer: æ•°æ®åº”è¯¥ä»ç¼“å­˜å¯¹è±¡å“ªä¸ªåœ°å€å¼€å§‹è·å–
+			glEnableVertexAttribArray(attrib_location);//è®¾ç½®å¯ç”¨äºindexç´¢å¼•ç›¸å…³è”çš„é¡¶ç‚¹æ•°ç»„
 		}
 		else {
 			printf("could not find attribute %s in shader.", buf->name);
@@ -66,46 +93,272 @@ void vr3dmesh::vr_3d_mesh_draw_mode(GLenum draw_mode)
 	glDrawElements(draw_mode, this->index_size, GL_UNSIGNED_SHORT, 0);
 }
 
-void vr3dmesh::vr_3d_mesh_upload_plane(float aspect)
+// å¹³é¢é¡¶ç‚¹æ•°æ®
+void vr3dmesh::vr_3d_mesh_upload_plane()
 {
-	// Ö¸¶¨¶¥µãÊôĞÔÊı¾İ ¶¥µãÎ»ÖÃ ÑÕÉ« ÎÆÀí
+	// æŒ‡å®šé¡¶ç‚¹å±æ€§æ•°æ® é¡¶ç‚¹ä½ç½® é¢œè‰² çº¹ç†
 	GLfloat vertices[] = {
 		-0.5f, -0.5f, 0.0f,	// 0
 		 0.5f, -0.5f, 0.0f,	// 1
 		 0.5f,  0.5f, 0.0f,	// 2
 		-0.5f,  0.5f, 0.0f,	// 3
 	};
-	//ÎÆÀí×ø±ê
+	//çº¹ç†åæ ‡
 	GLfloat uvs[] = {
 	   0.0f, 0.0f,	// 0
 	   1.0f, 0.0f,	// 1
 	   1.0f, 1.0f,	// 2
 	   0.0f, 1.0f	// 3
 	};
-	// Ë÷ÒıÊı¾İ
+	// ç´¢å¼•æ•°æ®
 	const GLushort indices[] = {
-		0, 1, 2,  // µÚÒ»¸öÈı½ÇĞÎ
-		0, 2, 3   // µÚ¶ş¸öÈı½ÇĞÎ
+		0, 1, 2,  // ç¬¬ä¸€ä¸ªä¸‰è§’å½¢
+		0, 2, 3   // ç¬¬äºŒä¸ªä¸‰è§’å½¢
 	};
 
-	this->vertex_count = 4;	//¶¥µãµÄ¸öÊı
+	this->vertex_count = 4;	//é¡¶ç‚¹çš„ä¸ªæ•°
 	this->draw_mode = GL_TRIANGLES;
 
-	// ½«¶¥µã×ø±ê ÎÆÀí×ø±êÌá½»GPU
+	// å°†é¡¶ç‚¹åæ ‡ çº¹ç†åæ ‡æäº¤GPU
 	vr_3d_mesh_append_attribute_buffer("position", sizeof(GLfloat), 3, vertices);
 	vr_3d_mesh_append_attribute_buffer("uv", sizeof(GLfloat), 2, uvs);
 
 	this->index_size = sizeof(indices);
-	// °ó¶¨EBO¶ÔÏó
+	// ç»‘å®šEBOå¯¹è±¡
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
-	// ·ÖÅä¿Õ¼ä£¬´«ËÍË÷ÒıÊı¾İ
+	// åˆ†é…ç©ºé—´ï¼Œä¼ é€ç´¢å¼•æ•°æ®
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->index_size, indices, GL_STATIC_DRAW);
 }
 
-// name£ºglslÖĞ½ÓÊÕÊı¾İ±äÁ¿µÄÃû³Æ
-// element_size£ºÃ¿¸öÔªËØµÄ´óĞ¡
-// vector_length£ºÃ¿ĞĞÊı¾İ¸öÊı
-// vertices£ºÊı¾İµÄµØÖ·
+// ç«‹æ–¹ä½“é¡¶ç‚¹æ•°æ®
+void vr3dmesh::vr_3d_mesh_upload_cube()
+{
+	/* *INDENT-OFF* */
+	GLfloat positions[] = {
+		/* front face */
+		 1.0,  1.0, -1.0,
+		 1.0, -1.0, -1.0,
+		-1.0, -1.0, -1.0,
+		-1.0,  1.0, -1.0,
+		/* back face */
+		 1.0,  1.0,  1.0,
+		-1.0,  1.0,  1.0,
+		-1.0, -1.0,  1.0,
+		 1.0, -1.0,  1.0,
+		/* right face */
+		 1.0,  1.0,  1.0,
+		 1.0, -1.0,  1.0,
+		 1.0, -1.0, -1.0,
+		 1.0,  1.0, -1.0,
+		/* left face */
+		-1.0,  1.0,  1.0,
+		-1.0,  1.0, -1.0,
+		-1.0, -1.0, -1.0,
+		-1.0, -1.0,  1.0,
+		/* top face */
+		 1.0, -1.0,  1.0,
+		-1.0, -1.0,  1.0,
+		-1.0, -1.0, -1.0,
+		 1.0, -1.0, -1.0,
+		/* bottom face */
+		 1.0,  1.0,  1.0,
+		 1.0,  1.0, -1.0,
+		-1.0,  1.0, -1.0,
+		-1.0,  1.0,  1.0
+	};
+
+	/* *INDENT-OFF* */
+	GLfloat uvs[] = {
+#if 0	// youtu video
+		/* front face */
+		0.667, 0.5,
+		0.667, 0.0,
+		0.333, 0.0,
+		0.333, 0.5,
+		/* back face */
+		0.333, 0.5,
+		0.333, 1.0,
+		0.667, 1.0,
+		0.667, 0.5,
+		/* right face */
+		1.0, 0.5,
+		1.0, 0.0,
+		0.667, 0.0,
+		0.667, 0.5,
+		/* left face */
+		0.0, 0.5,
+		0.333, 0.5,
+		0.333, 0.0,
+		0.0, 0.0,
+		/* top face */
+		0.667, 0.5,
+		0.667, 1.0,
+		1.0, 1.0,
+		1.0, 0.5,
+		/* bottom face */
+		0.333, 0.5,
+		0.0, 0.5,
+		0.0, 1.0,
+		0.333, 1.0,
+#endif // 0
+		/* front face */
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		/* back face */
+		1.0, 0.0,
+		0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		/* right face */
+		1.0, 0.0,
+		0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		/* left face */
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		/* top face */
+		1.0, 0.0,
+		0.0, 0.0,
+		0.0, 1.0,
+		1.0, 1.0,
+		/* bottom face */
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0
+	};
+
+	GLushort indices[] = {
+		0, 1, 2,
+		0, 2, 3,
+		4, 5, 6,
+		4, 6, 7,
+		8, 9, 10,
+		8, 10, 11,
+		12, 13, 14,
+		12, 14, 15,
+		16, 17, 18,
+		16, 18, 19,
+		20, 21, 22,
+		20, 22, 23
+	};
+	/* *INDENT-ON* */
+
+	this->vertex_count = 4 * 6;	//é¡¶ç‚¹çš„ä¸ªæ•°
+	this->draw_mode = GL_TRIANGLES;
+
+	vr_3d_mesh_append_attribute_buffer("position", sizeof(GLfloat), 3, positions);
+	vr_3d_mesh_append_attribute_buffer("uv", sizeof(GLfloat), 2, uvs);
+
+	// index
+	this->index_size = sizeof(indices);// / sizeof(indices[0]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->index_size, indices, GL_STATIC_DRAW);
+}
+
+// çƒä½“æ•°æ®
+void vr3dmesh::vr_3d_mesh_upload_sphere(float radius, unsigned stacks, unsigned slices)
+{
+	printf("gst_3d_mesh_upload_sphere.radiusï¼š%f, stacks:%d, slices:%d.\n", radius, stacks, slices);
+	GLfloat* positions;
+	GLfloat* uvs;
+	GLushort* indices;
+
+	this->vertex_count = (slices + 1) * stacks;	//é¡¶ç‚¹ä¸ªæ•°
+	const int component_size = sizeof(GLfloat) * this->vertex_count;//ä¿å­˜æ•°æ®çš„æ•°ç»„ç©ºé—´çš„å¤§å°
+
+	positions = (GLfloat*)malloc(component_size * 3);//åˆ†é…å¯¹åº”å¤§å°çš„å†…å­˜ç©ºé—´(å­˜å‚¨é¡¶ç‚¹åæ ‡)
+	uvs = (GLfloat*)malloc(component_size * 2);//åˆ†é…å¯¹åº”å¤§å°çš„å†…å­˜ç©ºé—´(å­˜å‚¨çº¹ç†åæ ‡)
+
+	GLfloat* v = positions;
+	GLfloat* t = uvs;
+
+	float const J = 1. / (float)(stacks - 1);//åœ¨æ ‡å‡†åŒ–è®¾å¤‡åæ ‡(NDC)ä¸­æ¯ä¸ªæ ¼å­çš„é—´éš™ï¼Ÿ
+	float const I = 1. / (float)(slices - 1);//åœ¨æ ‡å‡†åŒ–è®¾å¤‡åæ ‡(NDC)ä¸­æ¯ä¸ªæ ¼å­çš„é—´éš™ï¼Ÿ
+
+	for (int i = 0; i < slices; i++) {
+		float const theta = M_PI * i * I;
+		for (int j = 0; j < stacks; j++) {
+			float const phi = 2 * M_PI * j * J + M_PI / 2.0;
+
+			float const x = sin(theta) * cos(phi);
+			float const y = -cos(theta);
+			float const z = sin(phi) * sin(theta);
+
+			*v++ = x * radius;
+			*v++ = y * radius;
+			*v++ = z * radius;
+
+			*t++ = j * J;//texture x è½´åæ ‡
+			*t++ = i * I;//texture y è½´åæ ‡
+		}
+	}
+
+	vr_3d_mesh_append_attribute_buffer("position", sizeof(GLfloat), 3, positions);
+	vr_3d_mesh_append_attribute_buffer("uv", sizeof(GLfloat), 2, uvs);
+
+	/* index */
+	this->index_size = (slices - 1) * stacks * 2;
+
+	indices = (GLushort*)malloc(sizeof(GLushort) * this->index_size);
+	GLushort* indextemp = indices;
+
+	// -3 = minus caps slices - one to iterate over strips
+	for (int i = 0; i < slices - 1; i++) {
+		for (int j = 0; j < stacks; j++) {
+			*indextemp++ = i * stacks + j;
+			*indextemp++ = (i + 1) * stacks + j;
+		}
+	}
+
+	/* linear index */
+	/*
+	   self->index_size = (slices - 2) * stacks;
+	   for (int i = 0; i < self->index_size; i++)
+	   *indextemp++ = i;
+	 */
+
+	 // upload index
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * this->index_size, indices, GL_STATIC_DRAW);
+
+	this->draw_mode = GL_TRIANGLE_STRIP;
+}
+
+void vr3dmesh::vr_3d_mesh_upload_line(glm::vec3* from, glm::vec3* to, glm::vec3* color)
+{
+	GLfloat vertices[] = {
+		from->x, from->y, from->z, 1.0,
+		to->x, to->y, to->z, 1.0,
+	};
+	GLfloat colors[] = {
+		color->x, color->y, color->z,
+		color->x, color->y, color->z,
+	};
+
+	this->vertex_count = 2;
+	this->draw_mode = GL_LINES;
+
+	vr_3d_mesh_append_attribute_buffer("position", sizeof(GLfloat), 4, vertices);
+	vr_3d_mesh_append_attribute_buffer("color", sizeof(GLfloat), 3, colors);
+
+	const GLushort indices[] = { 0, 1 };
+
+	// index
+	this->index_size = sizeof(indices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->index_size, indices, GL_STATIC_DRAW);
+}
+
+// nameï¼šglslä¸­æ¥æ”¶æ•°æ®å˜é‡çš„åç§°
+// element_sizeï¼šæ¯ä¸ªå…ƒç´ çš„å¤§å°
+// vector_lengthï¼šæ¯è¡Œæ•°æ®ä¸ªæ•°
+// verticesï¼šæ•°æ®çš„åœ°å€
 void vr3dmesh::vr_3d_mesh_append_attribute_buffer(const char* name, size_t element_size, int vector_length, GLfloat* vertices)
 {
 	struct vr3dattributebuffer* attrib_buffer = (struct vr3dattributebuffer*)malloc(sizeof(struct vr3dattributebuffer));
@@ -113,14 +366,14 @@ void vr3dmesh::vr_3d_mesh_append_attribute_buffer(const char* name, size_t eleme
 	attrib_buffer->name = name;
 	attrib_buffer->element_size = element_size;
 	attrib_buffer->vector_length = vector_length;
-	// ´´½¨VBO¶ÔÏó
+	// åˆ›å»ºVBOå¯¹è±¡
 	glGenBuffers(1, &attrib_buffer->vbo);
-	// °ó¶¨VBO¶ÔÏó
+	// ç»‘å®šVBOå¯¹è±¡
 	glBindBuffer(GL_ARRAY_BUFFER, attrib_buffer->vbo);
-	// ·ÖÅä¿Õ¼ä£¬´«ËÍ¶¥µãÊı¾İ
+	// åˆ†é…ç©ºé—´ï¼Œä¼ é€é¡¶ç‚¹æ•°æ®
 	glBufferData(GL_ARRAY_BUFFER, this->vertex_count * attrib_buffer->vector_length * attrib_buffer->element_size, vertices, GL_STATIC_DRAW);
 
-	this->attribute_buffers.push_back(attrib_buffer);//½« attrib_buffer Ìí¼Óµ½ attribute_buffers(List)ÖĞ
+	this->attribute_buffers.push_back(attrib_buffer);//å°† attrib_buffer æ·»åŠ åˆ° attribute_buffers(List)ä¸­
 
 	printf("generated %s buffer #%d", attrib_buffer->name, attrib_buffer->vbo);
 }

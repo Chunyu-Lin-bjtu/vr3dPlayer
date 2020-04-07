@@ -1,14 +1,14 @@
-#ifndef _COMMON_H_
+ï»¿#ifndef _COMMON_H_
 #define _COMMON_H_
 
-// ÒıÈëGLEW¿â ¶¨Òå¾²Ì¬Á´½Ó
+// å¼•å…¥GLEWåº“ å®šä¹‰é™æ€é“¾æ¥
 #define GLEW_STATIC
 #include "GL/glew.h"
 
-// ÒıÈëGLFW¿â
+// å¼•å…¥GLFWåº“
 #include "GLFW/glfw3.h"
 
-// ÒıÈëGLM¿â
+// å¼•å…¥GLMåº“
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>

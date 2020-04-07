@@ -1,4 +1,4 @@
-#ifndef _TEXTURE_H_
+ï»¿#ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
 #include <iostream>
@@ -9,23 +9,23 @@ class TextureHelper
 {
 public:
 	/*
-	/* ³É¹¦¼ÓÔØ2DÎÆÀíÔò·µ»ØÎÆÀí¶ÔÏóId ·ñÔò·µ»Ø0
+	/* æˆåŠŸåŠ è½½2Dçº¹ç†åˆ™è¿”å›çº¹ç†å¯¹è±¡Id å¦åˆ™è¿”å›0
 	*/
 	static  GLint load2DTexture(const char* filename, GLint internalFormat = GL_RGB,
 		GLenum picFormat = GL_RGB, int loadChannels = SOIL_LOAD_RGB)
 	{
-		// Step1 ´´½¨²¢°ó¶¨ÎÆÀí¶ÔÏó
+		// Step1 åˆ›å»ºå¹¶ç»‘å®šçº¹ç†å¯¹è±¡
 		GLuint textureId = 0;
 		glGenTextures(1, &textureId);
 		glBindTexture(GL_TEXTURE_2D, textureId);
-		// Step2 Éè¶¨wrap²ÎÊı
+		// Step2 è®¾å®šwrapå‚æ•°
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		// Step3 Éè¶¨filter²ÎÊı
+		// Step3 è®¾å®šfilterå‚æ•°
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-			GL_LINEAR_MIPMAP_LINEAR); // ÎªMipMapÉè¶¨filter·½·¨
-		// Step4 ¼ÓÔØÎÆÀí
+			GL_LINEAR_MIPMAP_LINEAR); // ä¸ºMipMapè®¾å®šfilteræ–¹æ³•
+		// Step4 åŠ è½½çº¹ç†
 		GLubyte* imageData = NULL;
 		int picWidth, picHeight;
 		imageData = SOIL_load_image(filename, &picWidth, &picHeight, 0, loadChannels);
@@ -37,9 +37,9 @@ public:
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, picWidth, picHeight,
 			0, picFormat, GL_UNSIGNED_BYTE, imageData);
 
-		//Îªµ±Ç°°ó¶¨µÄÎÆÀí×Ô¶¯Éú³ÉËùÓĞĞèÒªµÄ¶à¼¶½¥Ô¶ÎÆÀí
+		//ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†è‡ªåŠ¨ç”Ÿæˆæ‰€æœ‰éœ€è¦çš„å¤šçº§æ¸è¿œçº¹ç†
 		glGenerateMipmap(GL_TEXTURE_2D);
-		// Step5 ÊÍ·ÅÎÆÀíÍ¼Æ¬×ÊÔ´
+		// Step5 é‡Šæ”¾çº¹ç†å›¾ç‰‡èµ„æº
 		SOIL_free_image_data(imageData);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		return textureId;

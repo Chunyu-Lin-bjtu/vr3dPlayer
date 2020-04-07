@@ -1,4 +1,4 @@
-#include "vr3dscene.h"
+﻿#include "vr3dscene.h"
 
 
 vr3dscene::vr3dscene(void (*_init_func) (vr3dscene*))

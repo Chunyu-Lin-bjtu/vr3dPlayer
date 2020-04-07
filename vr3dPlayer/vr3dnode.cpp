@@ -1,4 +1,4 @@
-#include "vr3dnode.h"
+﻿#include "vr3dnode.h"
 
 void vr_3d_node_draw(vr3dnode* node)
 {
@@ -30,9 +30,10 @@ vr3dnode::~vr3dnode()
 {
 }
 
+// 绘制坐标系
 void vr3dnode::vr_3d_node_new_debug_axes()
 {
-	/*this->shader = new vr3dshader("shader/mvp_color.vert", "shader/color.frag");
+	this->shader = new vr3dshader("shader/mvp_color.vert", "shader/color.frag");
 
 	if (this->shader == NULL) {
 		printf("Failed to create shaders.\n");
@@ -65,7 +66,7 @@ void vr3dnode::vr_3d_node_new_debug_axes()
 	vr3dmesh* z_axis = new vr3dmesh();
 	z_axis->vr_3d_mesh_new_line(&from, &to, &color);
 	z_axis->vr_3d_mesh_bind_shader(this->shader);
-	this->meshes.push_back(z_axis);*/
+	this->meshes.push_back(z_axis);
 }
 
 vr3dnode* vr3dnode::vr_3d_node_new_from_mesh_shader(vr3dmesh* mesh, vr3dshader* shader)

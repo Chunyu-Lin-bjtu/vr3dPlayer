@@ -1,11 +1,11 @@
-#ifndef _VR_3D_SHADER_H_
+ï»¿#ifndef _VR_3D_SHADER_H_
 #define _VR_3D_SHADER_H_
-//°üº¬C++±ê×¼Í·ÎÄ¼ş
+//åŒ…å«C++æ ‡å‡†å¤´æ–‡ä»¶
 #include <iostream>
 #include <vector>
 #include <fstream>		//for ofstream
 
-// °üº¬ÏîÄ¿Í·ÎÄ¼ş
+// åŒ…å«é¡¹ç›®å¤´æ–‡ä»¶
 #include "common.h"
 
 struct ShaderFile
@@ -56,7 +56,7 @@ public:
 	void vr_3d_shader_update_uniform_1i(const GLchar* name, GLint i)
 	{
 		GLint location = glGetUniformLocation(programId, name);
-		glUniform1i(location, i); // ÉèÖÃÎÆÀíµ¥ÔªÎªiºÅ
+		glUniform1i(location, i); // è®¾ç½®çº¹ç†å•å…ƒä¸ºiå·
 	}
 	
 	void updateUniform4f(const GLchar* name, GLfloat f0, GLfloat f1, GLfloat f2, GLfloat f3)
@@ -76,10 +76,10 @@ public:
 	void vr_3d_shader_upload_matrix(const GLchar* name, const GLfloat* value)
 	{
 		GLint transformLoc = glGetUniformLocation(programId, name);
-		glUniformMatrix4fv(transformLoc, //uniformµÄÎ»ÖÃÖµ
-			1,			//¸æËßOpenGLÎÒÃÇ½«Òª·¢ËÍ¶àÉÙ¸ö¾ØÕó
-			GL_FALSE,	//ÊÇ·ñÏ£Íû¶ÔÎÒÃÇµÄ¾ØÕó½øĞĞÖÃ»»(Transpose)£¬Ò²¾ÍÊÇËµ½»»»ÎÒÃÇ¾ØÕóµÄĞĞºÍÁĞ
-			value);		//ÕæÕıµÄ¾ØÕóÊı¾İ
+		glUniformMatrix4fv(transformLoc, //uniformçš„ä½ç½®å€¼
+			1,			//å‘Šè¯‰OpenGLæˆ‘ä»¬å°†è¦å‘é€å¤šå°‘ä¸ªçŸ©é˜µ
+			GL_FALSE,	//æ˜¯å¦å¸Œæœ›å¯¹æˆ‘ä»¬çš„çŸ©é˜µè¿›è¡Œç½®æ¢(Transpose)ï¼Œä¹Ÿå°±æ˜¯è¯´äº¤æ¢æˆ‘ä»¬çŸ©é˜µçš„è¡Œå’Œåˆ—
+			value);		//çœŸæ­£çš„çŸ©é˜µæ•°æ®
 	}
 
 protected:
@@ -88,15 +88,15 @@ private:
 
 private:
 	/*
-	* ´ÓÎÄ¼ş¼ÓÔØ¶¥µãºÍÆ¬Ôª×ÅÉ«Æ÷
-	* ´«µİ²ÎÊıÎª [(×ÅÉ«Æ÷ÎÄ¼şÀàĞÍ£¬×ÅÉ«Æ÷ÎÄ¼şÂ·¾¶)+]
+	* ä»æ–‡ä»¶åŠ è½½é¡¶ç‚¹å’Œç‰‡å…ƒç€è‰²å™¨
+	* ä¼ é€’å‚æ•°ä¸º [(ç€è‰²å™¨æ–‡ä»¶ç±»å‹ï¼Œç€è‰²å™¨æ–‡ä»¶è·¯å¾„)+]
 	*/
 	void loadFromFile(std::vector<ShaderFile>& shaderFileVec)
 	{
 		std::vector<GLuint> shaderObjectIdVec;
 		std::vector<std::string> sourceVec;
 		size_t shaderCount = shaderFileVec.size();
-		// ¶ÁÈ¡ÎÄ¼şÔ´´úÂë
+		// è¯»å–æ–‡ä»¶æºä»£ç 
 		for (size_t i = 0; i < shaderCount; ++i)
 		{
 			std::string shaderSource;
@@ -108,7 +108,7 @@ private:
 			sourceVec.push_back(shaderSource);
 		}
 		bool bSuccess = true;
-		// ±àÒëshader object
+		// ç¼–è¯‘shader object
 		for (size_t i = 0; i < shaderCount; ++i)
 		{
 			GLuint shaderId = glCreateShader(shaderFileVec[i].shaderType);
@@ -116,8 +116,8 @@ private:
 			glShaderSource(shaderId, 1, &c_str, NULL);
 			glCompileShader(shaderId);
 			GLint compileStatus = 0;
-			glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus); // ¼ì²é±àÒë×´Ì¬
-			if (compileStatus == GL_FALSE) // »ñÈ¡´íÎó±¨¸æ
+			glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus); // æ£€æŸ¥ç¼–è¯‘çŠ¶æ€
+			if (compileStatus == GL_FALSE) // è·å–é”™è¯¯æŠ¥å‘Š
 			{
 				GLint maxLength = 0;
 				glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
@@ -129,7 +129,7 @@ private:
 			}
 			shaderObjectIdVec.push_back(shaderId);
 		}
-		// Á´½Óshader program
+		// é“¾æ¥shader program
 		if (bSuccess)
 		{
 			this->programId = glCreateProgram();
@@ -149,7 +149,7 @@ private:
 				std::cout << "Error::shader link failed," << &errLog[0] << std::endl;
 			}
 		}
-		// Á´½ÓÍê³Éºódetach ²¢ÊÍ·Åshader object
+		// é“¾æ¥å®Œæˆådetach å¹¶é‡Šæ”¾shader object
 		for (size_t i = 0; i < shaderCount; ++i)
 		{
 			if (this->programId != 0)
@@ -161,7 +161,7 @@ private:
 	}
 
 	/*
-	* ¶ÁÈ¡×ÅÉ«Æ÷³ÌĞòÔ´Âë
+	* è¯»å–ç€è‰²å™¨ç¨‹åºæºç 
 	*/
 	bool loadShaderSource(const char* filePath, std::string& source)
 	{
@@ -172,7 +172,7 @@ private:
 			return false;
 		}
 		source.assign(std::istreambuf_iterator<char>(in_stream),
-			std::istreambuf_iterator<char>()); // ÎÄ¼şÁ÷µü´úÆ÷¹¹Ôì×Ö·û´®
+			std::istreambuf_iterator<char>()); // æ–‡ä»¶æµè¿­ä»£å™¨æ„é€ å­—ç¬¦ä¸²
 		return true;
 	}
 

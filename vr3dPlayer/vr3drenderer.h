@@ -1,9 +1,9 @@
-#ifndef _VR_3D_RENDERER_H_
+ï»¿#ifndef _VR_3D_RENDERER_H_
 #define _VR_3D_RENDERER_H_
 
 #include "common.h"
 
-// ÒýÈëGLM¿â
+// å¼•å…¥GLMåº“
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>

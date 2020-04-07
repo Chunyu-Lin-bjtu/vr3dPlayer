@@ -1,4 +1,4 @@
-#ifndef _VR_3D_COMPOSITOR_H_
+﻿#ifndef _VR_3D_COMPOSITOR_H_
 #define _VR_3D_COMPOSITOR_H_
 #include "common.h"
 #include "vr3dscene.h"

@@ -1,10 +1,10 @@
-#ifndef _GLFW_CALL_BACK_H_
+ï»¿#ifndef _GLFW_CALL_BACK_H_
 #define _GLFW_CALL_BACK_H_
 #include <iostream>
 #include "common.h"
 
 bool keys[1024];
-GLfloat mixValue = 0.4f; // ÎÆÀí»ìºÏ²ÎÊı
+GLfloat mixValue = 0.4f; // çº¹ç†æ··åˆå‚æ•°
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -14,8 +14,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	// µ±ÓÃ»§°´ÏÂESC¼ü,ÎÒÃÇÉèÖÃwindow´°¿ÚµÄWindowShouldCloseÊôĞÔÎªtrue
-	// ¹Ø±ÕÓ¦ÓÃ³ÌĞò
+	// å½“ç”¨æˆ·æŒ‰ä¸‹ESCé”®,æˆ‘ä»¬è®¾ç½®windowçª—å£çš„WindowShouldCloseå±æ€§ä¸ºtrue
+	// å…³é—­åº”ç”¨ç¨‹åº
 	std::cout << key << std::endl;
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -33,7 +33,7 @@ void key_callback_mix(GLFWwindow* window, int key, int scancode, int action, int
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
-		glfwSetWindowShouldClose(window, GL_TRUE); // ¹Ø±Õ´°¿Ú
+		glfwSetWindowShouldClose(window, GL_TRUE); // å…³é—­çª—å£
 	}
 	else if (key == GLFW_KEY_S && action == GLFW_PRESS)
 	{

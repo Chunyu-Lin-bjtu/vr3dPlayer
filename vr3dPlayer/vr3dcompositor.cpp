@@ -1,5 +1,5 @@
-#include <iostream>
-// °üº¬ÎÆÀí¼ÓÔØ¸¨ÖúÀà
+ï»¿#include <iostream>
+// åŒ…å«çº¹ç†åŠ è½½è¾…åŠ©ç±»
 #include "texture.h"
 
 #include "glfwcallback.h"
@@ -12,16 +12,22 @@ static void _init_scene(vr3dscene* scene)
 	vr3dnode* node;
 	vr3dshader* shader = new vr3dshader("shader/04-gltexture-v3.0.vertex", "shader/04-gltexture-v3.0.frag");
 
-	mesh->vr_3d_mesh_new_plane(1.0f);
+	// å¹³é¢
+	mesh->vr_3d_mesh_new_plane();
+	// ç«‹æ–¹ä½“
+	//mesh->vr_3d_mesh_new_cube();
+	// çƒä½“
+	//mesh->vr_3d_mesh_new_sphere(0.8, 100, 100);
+	
 	node = vr3dnode::vr_3d_node_new_from_mesh_shader(mesh, shader);
 	scene->vr_3d_scene_append_node(node);
 
 	glClearColor(0.f, 0.f, 0.f, 0.f);
-	//°ó¶¨ÎÆÀí¶ÔÏó
+	//ç»‘å®šçº¹ç†å¯¹è±¡
 	glActiveTexture(GL_TEXTURE0);
 
 	shader->vr_3d_shader_bind();
-	shader->vr_3d_shader_update_uniform_1i("tex1", 0);// ÉèÖÃÎÆÀíµ¥ÔªÎª0ºÅ
+	shader->vr_3d_shader_update_uniform_1i("tex1", 0);// è®¾ç½®çº¹ç†å•å…ƒä¸º0å·
 }
 vr3dcompositor::vr3dcompositor()
 {
@@ -39,7 +45,7 @@ vr3dcompositor::~vr3dcompositor()
 
 bool vr3dcompositor::vr_3d_compositor_init_scene()
 {
-#if 0 //»¹Ã»Ìí¼Ócamera
+#if 0 //è¿˜æ²¡æ·»åŠ camera
 	vr3dhmd* hmd = ((vr3dhmdcamera*)this->scene->camera)->hmd;
 	if (!hmd->device)
 		return false;
@@ -66,12 +72,12 @@ bool vr3dcompositor::vr_3d_compositor_update_texture(/*AVFrame* pictureYUV*/)
 int vr3dcompositor::vr_3d_compositor_init_gl_context()
 {
 	// Init GLFW
-	if (!glfwInit())	// ³õÊ¼»¯glfw¿â
+	if (!glfwInit())	// åˆå§‹åŒ–glfwåº“
 	{
 		std::cout << "Error::GLFW could not initialize GLFW!" << std::endl;
 		return -1;
 	}
-	// ¿ªÆôOpenGL 3.3 core profile
+	// å¼€å¯OpenGL 3.3 core profile
 	std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl;
 	glfwWindowHint(GLFW_SAMPLES, 4);				// 4x antialiasing
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);	// We want OpenGL 3.3
@@ -88,14 +94,14 @@ int vr3dcompositor::vr_3d_compositor_init_gl_context()
 		glfwTerminate();
 		return -1;
 	}
-	// ´´½¨µÄ´°¿ÚµÄcontextÖ¸¶¨Îªµ±Ç°context
+	// åˆ›å»ºçš„çª—å£çš„contextæŒ‡å®šä¸ºå½“å‰context
 	glfwMakeContextCurrent(window);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback_mix);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	// ÈÃglew»ñÈ¡ËùÓĞÍØÕ¹º¯Êı
+	// è®©glewè·å–æ‰€æœ‰æ‹“å±•å‡½æ•°
 	glewExperimental = GL_TRUE;
 	// Initialize GLEW to setup the OpenGL Function pointers
 	GLenum status = glewInit();
@@ -110,7 +116,7 @@ int vr3dcompositor::vr_3d_compositor_init_gl_context()
 	// Define the viewport dimensions
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
-	// ÉèÖÃÊÓ¿Ú²ÎÊı
+	// è®¾ç½®è§†å£å‚æ•°
 	glViewport(0, 0, width, height);
 
 	return 0;
@@ -125,10 +131,9 @@ bool vr3dcompositor::vr_3d_compositor_draw()
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->textureId1);
-	glClearColor(0.5f, 0.4f, 0.1f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	this->scene->vr_3d_scene_draw();
 
-	glfwSwapBuffers(window); // ½»»»»º´æ
+	glfwSwapBuffers(window); // äº¤æ¢ç¼“å­˜
 	return true;
 }

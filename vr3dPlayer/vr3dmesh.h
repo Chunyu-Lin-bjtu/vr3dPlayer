@@ -1,10 +1,10 @@
-#ifndef _VR_3D_MESH_H_
+ï»¿#ifndef _VR_3D_MESH_H_
 #define _VR_3D_MESH_H_
-//°üº¬C++±ê×¼Í·ÎÄ¼ş
+//åŒ…å«C++æ ‡å‡†å¤´æ–‡ä»¶
 #include <list>
 using namespace std;
 
-// °üº¬ÏîÄ¿Í·ÎÄ¼ş
+// åŒ…å«é¡¹ç›®å¤´æ–‡ä»¶
 #include "common.h"
 #include "vr3dshader.h"
 
@@ -22,10 +22,11 @@ public:
 	~vr3dmesh();
 
 public:
-	void vr_3d_mesh_new_plane(float aspect);
-
-
-
+	//new
+	void vr_3d_mesh_new_plane();
+	void vr_3d_mesh_new_cube();
+	void vr_3d_mesh_new_sphere(float radius, unsigned stacks, unsigned slices);
+	void vr_3d_mesh_new_line(glm::vec3* from, glm::vec3* to, glm::vec3* color);
 
 	void vr_3d_mesh_init_buffers();
 
@@ -34,9 +35,11 @@ public:
 	void vr_3d_mesh_draw();
 	void vr_3d_mesh_draw_mode(GLenum draw_mode);
 
-
-	void vr_3d_mesh_upload_plane(float aspect);
-
+	//upload
+	void vr_3d_mesh_upload_plane();
+	void vr_3d_mesh_upload_cube();
+	void vr_3d_mesh_upload_sphere(float radius, unsigned stacks, unsigned slices);
+	void vr_3d_mesh_upload_line(glm::vec3* from, glm::vec3* to, glm::vec3* color);
 
 	void vr_3d_mesh_append_attribute_buffer(const char* name, size_t element_size, int vector_length, GLfloat* vertices);
 
@@ -45,10 +48,10 @@ public:
 	GLuint vao;
 	GLuint ebo;
 
-	GLuint index_size;		//Ë÷Òı´óĞ¡
-	GLuint vertex_count;	//¶¥µã¸öÊı
+	GLuint index_size;		//ç´¢å¼•å¤§å°
+	GLuint vertex_count;	//é¡¶ç‚¹ä¸ªæ•°
 
-	GLenum draw_mode;		//»æÖÆÄ£Ê½
+	GLenum draw_mode;		//ç»˜åˆ¶æ¨¡å¼
 };
 #endif // !_VR_3D_MESH_H_
 
