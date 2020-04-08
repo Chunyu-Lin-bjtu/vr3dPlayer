@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "vr3devent.h"
 
 vr3dcamera_arcball::vr3dcamera_arcball()
 {
@@ -25,7 +26,7 @@ void vr3dcamera_arcball::vr_3d_camera_update_view()
 {
     float radius = exp(this->center_distance);
 
-    printf("arcball radius = %f fov %f", radius, fov);
+    //printf("arcball radius = %f fov %f", radius, fov);
 
     eye = glm::vec3( radius * sin(this->theta) * cos(this->phi),
         radius * -cos(this->theta),
@@ -43,6 +44,70 @@ void vr3dcamera_arcball::vr_3d_camera_update_view()
     gst_3d_math_matrix_negate_component(&v_inverted, 3, 2, &v_inverted_fix);*/
     mvp = view_matrix * projection_matrix;
     //graphene_matrix_multiply(&v_inverted_fix, &projection_matrix, &cam->mvp);
+}
+
+void vr3dcamera_arcball::vr_3d_camera_navigation_event(vr3devent* e)
+{
+    eventType event_type = e->vr_3d_event_get_type();
+
+    switch (event_type) {
+    case VR_3D_EVENT_MOUSE_MOVE: {
+        /* hanlde the mouse motion for zooming and rotating the view */
+        double x, y;
+        x = e->vr_3d_event_get_double("pointer_x");
+        y = e->vr_3d_event_get_double("pointer_y");
+
+        double dx, dy;
+        dx = x - this->cursor_last_x;
+        dy = y - this->cursor_last_y;
+
+        if (this->pressed_mouse_button != 0) {
+            printf("Rotating [%fx%f]\n", dx, dy);
+            vr_3d_camera_arcball_rotate(dx, dy);
+        }
+        this->cursor_last_x = x;
+        this->cursor_last_y = y;
+        break;
+    }
+    case VR_3D_EVENT_MOUSE_BUTTON_RELEASE: {
+        int button;
+        button = e->vr_3d_event_get_int("button");
+        this->pressed_mouse_button = 0;
+
+        if (button == 1) {
+            /* first mouse button release */
+            this->cursor_last_x = e->vr_3d_event_get_double("pointer_x");
+            this->cursor_last_y = e->vr_3d_event_get_double("pointer_y");
+        }
+        else if (button == 4 || button == 6) {
+            /* wheel up */
+            //gst_3d_camera_arcball_translate (self, -1.0);
+            if (this->fov > this->min_fov) {
+                this->fov *= this->zoom_step;
+                this->fov = std::fmax(this->min_fov, this->fov);
+                vr_3d_camera_update_view();
+            }
+        }
+        else if (button == 5 || button == 7) {
+            /* wheel down */
+            //gst_3d_camera_arcball_translate (self, 1.0);
+            if (this->fov < this->max_fov) {
+                this->fov /= this->zoom_step;
+                this->fov = std::fmin(this->max_fov, this->fov);
+                vr_3d_camera_update_view();
+            }
+        }
+        break;
+    }
+    case VR_3D_EVENT_MOUSE_BUTTON_PRESS: {
+        int button;
+        button = e->vr_3d_event_get_int("button");
+        this->pressed_mouse_button = 1;
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void vr3dcamera_arcball::vr_3d_camera_arcball_translate(float z)
@@ -67,6 +132,6 @@ void vr3dcamera_arcball::vr_3d_camera_arcball_rotate(float x, float y)
     if (next_theta_pi < 2.0 && next_theta_pi > 1.0)
         this->theta += delta_theta;
 
-    printf("θ = %fπ ϕ = %fπ", this->theta / M_PI, this->phi / M_PI);
+    printf("θ = %fπ ϕ = %fπ ", this->theta / M_PI, this->phi / M_PI);
     vr_3d_camera_update_view();
 }

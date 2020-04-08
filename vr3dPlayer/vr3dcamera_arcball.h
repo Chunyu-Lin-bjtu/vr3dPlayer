@@ -12,6 +12,7 @@ public:
 
 public:
     virtual void vr_3d_camera_update_view();
+    virtual void vr_3d_camera_navigation_event(vr3devent* e);
 
     void vr_3d_camera_arcball_translate(float z);
 
