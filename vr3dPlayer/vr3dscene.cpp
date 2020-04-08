@@ -1,4 +1,5 @@
 ﻿#include "vr3dscene.h"
+#include "vr3devent.h"
 
 
 vr3dscene::vr3dscene(vr3dcamera* cam, void (*_init_func) (vr3dscene*))
@@ -8,7 +9,10 @@ vr3dscene::vr3dscene(vr3dcamera* cam, void (*_init_func) (vr3dscene*))
 	node_draw_func = &vr_3d_node_draw;
 
 	this->camera = cam;
-	gl_init_func = _init_func;	
+	gl_init_func = _init_func;
+
+	// 设置camera 事件
+	vr3devent::vr_3d_event_set_func(this->camera, &vr3dcamera::vr_3d_camera_navigation_event);
 }
 
 vr3dscene::~vr3dscene()
@@ -40,9 +44,15 @@ void vr3dscene::vr_3d_scene_draw_nodes(glm::mat4* mvp)
 	{
 		vr3dnode* node = *it;
 		node->shader->vr_3d_shader_bind();
-		//node->shader->vr_3d_shader_upload_matrix("mvp", glm::value_ptr(*mvp));
+#if 1
+		node->shader->vr_3d_shader_upload_matrix("mvp", glm::value_ptr(*mvp));
+#else
 		glm::mat4 identiy = glm::mat4();	//TODO...先更新一个单位矩阵，鼠标键盘事件还未加入
 		node->shader->vr_3d_shader_upload_matrix("mvp", glm::value_ptr(identiy));
+#endif // 0
+
+		
+		
 		this->node_draw_func(node);
 	}
 }
