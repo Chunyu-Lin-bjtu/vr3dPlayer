@@ -10,6 +10,13 @@ public:
 	vr3dcamera_arcball();
 	~vr3dcamera_arcball();
 
+public:
+    virtual void vr_3d_camera_update_view();
+
+    void vr_3d_camera_arcball_translate(float z);
+
+    void vr_3d_camera_arcball_rotate(float x, float y);
+
 private:
     float center_distance;
     float scroll_speed;
