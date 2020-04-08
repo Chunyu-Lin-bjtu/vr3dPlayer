@@ -5,7 +5,7 @@
 #include "common.h"
 
 using namespace std;
-
+class vr3devent;
 class vr3dcamera
 {
 public:
@@ -14,6 +14,7 @@ public:
 
 public:
     virtual void vr_3d_camera_update_view() = 0;
+    virtual void vr_3d_camera_navigation_event(vr3devent* e) = 0;
 
     void vr_3d_camera_update_view_mvp();
 
