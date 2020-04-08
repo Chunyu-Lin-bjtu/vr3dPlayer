@@ -35,7 +35,7 @@ vr3dcompositor::vr3dcompositor()
 	this->screen_w = 960;
 	this->screen_h = 540;
 
-	vr3dcamera_arcball* cam = new vr3dcamera_arcball();
+	vr3dcamera* cam = new vr3dcamera_arcball();
 	this->scene = new vr3dscene(cam, &_init_scene);
 }
 
@@ -47,14 +47,14 @@ vr3dcompositor::~vr3dcompositor()
 
 bool vr3dcompositor::vr_3d_compositor_init_scene()
 {
-#if 0 //还没添加camera
+#if HAVE_OPENHMD
 	vr3dhmd* hmd = ((vr3dhmdcamera*)this->scene->camera)->hmd;
 	if (!hmd->device)
 		return false;
 
 	screen_w = hmd->vr_3d_hmd_get_eye_width();
 	screen_h = hmd->vr_3d_hmd_get_eye_height();
-#endif // 0
+#endif // !HAVE_OPENHMD
 
 	vr_3d_compositor_init_gl_context();
 
