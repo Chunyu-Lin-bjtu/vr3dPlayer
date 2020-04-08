@@ -2,6 +2,7 @@
 // 包含纹理加载辅助类
 #include "texture.h"
 
+#include "vr3devent.h"
 #include "glfwcallback.h"
 #include "vr3dcamera_arcball.h"
 #include "vr3dcompositor.h"
@@ -14,11 +15,11 @@ static void _init_scene(vr3dscene* scene)
 	vr3dshader* shader = new vr3dshader("shader/04-gltexture-v3.0.vertex", "shader/04-gltexture-v3.0.frag");
 
 	// 平面
-	mesh->vr_3d_mesh_new_plane();
+	//mesh->vr_3d_mesh_new_plane();
 	// 立方体
 	//mesh->vr_3d_mesh_new_cube();
 	// 球体
-	//mesh->vr_3d_mesh_new_sphere(0.8, 100, 100);
+	mesh->vr_3d_mesh_new_sphere(0.8, 100, 100);
 	
 	node = vr3dnode::vr_3d_node_new_from_mesh_shader(mesh, shader);
 	scene->vr_3d_scene_append_node(node);
@@ -34,6 +35,9 @@ vr3dcompositor::vr3dcompositor()
 {
 	this->screen_w = 960;
 	this->screen_h = 540;
+
+	// 初始化 opengl，创建渲染窗口
+	vr_3d_compositor_init_gl_context();
 
 	vr3dcamera* cam = new vr3dcamera_arcball();
 	this->scene = new vr3dscene(cam, &_init_scene);
@@ -55,8 +59,6 @@ bool vr3dcompositor::vr_3d_compositor_init_scene()
 	screen_w = hmd->vr_3d_hmd_get_eye_width();
 	screen_h = hmd->vr_3d_hmd_get_eye_height();
 #endif // !HAVE_OPENHMD
-
-	vr_3d_compositor_init_gl_context();
 
 	this->scene->vr_3d_scene_init_gl();	// invoke "_init_scene" in this function
 
@@ -99,9 +101,8 @@ int vr3dcompositor::vr_3d_compositor_init_gl_context()
 	// 创建的窗口的context指定为当前context
 	glfwMakeContextCurrent(window);
 
-	// Set the required callback functions
-	glfwSetKeyCallback(window, key_callback_mix);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	//初始化事件
+	vr3devent::vr_3d_event_create(window);
 
 	// 让glew获取所有拓展函数
 	glewExperimental = GL_TRUE;
