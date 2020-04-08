@@ -29,6 +29,8 @@ public:
 
 	void vr_3d_scene_draw_nodes(glm::mat4* mvp);
 	void vr_3d_scene_draw();
+
+	void vr_3d_scene_clear_state();
 public:
 	
 	bool gl_initialized;
