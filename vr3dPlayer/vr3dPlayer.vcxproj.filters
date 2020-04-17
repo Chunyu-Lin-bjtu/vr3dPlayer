@@ -42,6 +42,15 @@
     <ClCompile Include="vr3devent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="vr3dcamera_hmd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dhmd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dmath.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -78,6 +87,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="vr3devent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dcamera_hmd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dhmd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dmath.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

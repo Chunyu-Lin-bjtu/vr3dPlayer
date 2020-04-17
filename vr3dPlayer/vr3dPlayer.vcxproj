@@ -152,8 +152,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="vr3dcamera.cpp" />
     <ClCompile Include="vr3dcamera_arcball.cpp" />
+    <ClCompile Include="vr3dcamera_hmd.cpp" />
     <ClCompile Include="vr3dcompositor.cpp" />
     <ClCompile Include="vr3devent.cpp" />
+    <ClCompile Include="vr3dhmd.cpp" />
+    <ClCompile Include="vr3dmath.cpp" />
     <ClCompile Include="vr3dmesh.cpp" />
     <ClCompile Include="vr3dnode.cpp" />
     <ClCompile Include="vr3drenderer.cpp" />
@@ -165,8 +168,11 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="vr3dcamera.h" />
     <ClInclude Include="vr3dcamera_arcball.h" />
+    <ClInclude Include="vr3dcamera_hmd.h" />
     <ClInclude Include="vr3dcompositor.h" />
     <ClInclude Include="vr3devent.h" />
+    <ClInclude Include="vr3dhmd.h" />
+    <ClInclude Include="vr3dmath.h" />
     <ClInclude Include="vr3dmesh.h" />
     <ClInclude Include="vr3dnode.h" />
     <ClInclude Include="vr3drenderer.h" />
