@@ -18,5 +18,8 @@
 #pragma comment(lib, "glew32sd.lib")
 #pragma comment(lib, "SOIL.lib")
 
+
+//#define HAVE_OPENHMD
+
 #endif // _COMMON_H_
 

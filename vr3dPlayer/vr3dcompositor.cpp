@@ -1,18 +1,21 @@
 ﻿#include <iostream>
 // 包含纹理加载辅助类
-#include "texture.h"
+#include "vr3dtexture.h"
 
 #include "vr3devent.h"
 #include "glfwcallback.h"
 #include "vr3dcamera_arcball.h"
 #include "vr3dcompositor.h"
 
+#ifdef HAVE_OPENHMD
+#include "vr3dcamera_hmd.h"
+#endif
 
 static void _init_scene(vr3dscene* scene)
 {
 	vr3dmesh* mesh = new vr3dmesh();
 	vr3dnode* node;
-	vr3dshader* shader = new vr3dshader("shader/04-gltexture-v3.0.vertex", "shader/04-gltexture-v3.0.frag");
+	vr3dshader* shader = new vr3dshader("shader/mvp_uv.vert", "shader/texture_uv.frag");
 
 	// 平面
 	//mesh->vr_3d_mesh_new_plane();
@@ -29,7 +32,7 @@ static void _init_scene(vr3dscene* scene)
 	glActiveTexture(GL_TEXTURE0);
 
 	shader->vr_3d_shader_bind();
-	shader->vr_3d_shader_update_uniform_1i("tex1", 0);// 设置纹理单元为0号
+	shader->vr_3d_shader_update_uniform_1i("texture", 0);// 设置纹理单元为0号
 }
 vr3dcompositor::vr3dcompositor()
 {
@@ -38,9 +41,15 @@ vr3dcompositor::vr3dcompositor()
 
 	// 初始化 opengl，创建渲染窗口
 	vr_3d_compositor_init_gl_context();
-
+#ifdef HAVE_OPENHMD
+	vr3dcamera* cam = new vr3dcamera_hmd();
+#else
 	vr3dcamera* cam = new vr3dcamera_arcball();
+#endif
 	this->scene = new vr3dscene(cam, &_init_scene);
+#ifdef HAVE_OPENHMD
+	this->scene->vr_3d_scene_init_hmd();
+#endif
 }
 
 vr3dcompositor::~vr3dcompositor()
@@ -51,13 +60,15 @@ vr3dcompositor::~vr3dcompositor()
 
 bool vr3dcompositor::vr_3d_compositor_init_scene()
 {
-#if HAVE_OPENHMD
-	vr3dhmd* hmd = ((vr3dhmdcamera*)this->scene->camera)->hmd;
+#ifdef HAVE_OPENHMD
+	vr3dhmd* hmd = ((vr3dcamera_hmd*)this->scene->camera)->hmd;
 	if (!hmd->device)
 		return false;
 
-	screen_w = hmd->vr_3d_hmd_get_eye_width();
-	screen_h = hmd->vr_3d_hmd_get_eye_height();
+	/*screen_w = hmd->vr_3d_hmd_get_eye_width();
+	screen_h = hmd->vr_3d_hmd_get_eye_height();*/
+	screen_w = 960;
+	screen_h = 540;
 #endif // !HAVE_OPENHMD
 
 	this->scene->vr_3d_scene_init_gl();	// invoke "_init_scene" in this function
@@ -91,7 +102,7 @@ int vr3dcompositor::vr_3d_compositor_init_gl_context()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	window = glfwCreateWindow(screen_w, screen_h, "Demo of mixing 2D texture(press A and S to adjust)", nullptr, nullptr);
+	window = glfwCreateWindow(screen_w, screen_h, "vr 3d player", nullptr, nullptr);
 	if (window == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

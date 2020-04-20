@@ -28,6 +28,8 @@ vr3dnode::vr3dnode()
 
 vr3dnode::~vr3dnode()
 {
+	meshes.clear();
+	//if (shader) delete shader;
 }
 
 // 绘制坐标系

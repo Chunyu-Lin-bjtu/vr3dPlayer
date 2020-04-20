@@ -25,6 +25,7 @@ public:
     glm::vec3 eye;
     glm::vec3 center;
     glm::vec3 up;
+    glm::vec3 side;
 
     list<int> pushed_buttons;
 
