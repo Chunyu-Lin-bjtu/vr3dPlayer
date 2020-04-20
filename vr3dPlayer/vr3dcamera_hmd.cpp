@@ -35,8 +35,8 @@ void vr3dcamera_hmd::vr_3d_camera_hmd_update_view_from_matrix()
 	left_eye_model_view_inv = _matrix_invert_y_rotation(&left_eye_model_view);
 	right_eye_model_view_inv = _matrix_invert_y_rotation(&right_eye_model_view);
 
-	this->left_vp_matrix = right_eye_model_view_inv * left_eye_projection;
-	this->right_vp_matrix = left_eye_model_view_inv * right_eye_projection;
+	this->left_vp_matrix = left_eye_projection * right_eye_model_view_inv;
+	this->right_vp_matrix = right_eye_projection * left_eye_model_view_inv;
 }
 
 void vr3dcamera_hmd::vr_3d_camera_hmd_update_view_from_quaternion()

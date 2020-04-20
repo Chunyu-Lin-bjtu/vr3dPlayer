@@ -67,6 +67,7 @@ void vr3dscene::vr_3d_scene_draw()
 			renderer->vr_3d_renderer_draw_stereo_shader_proj(this);
 		else
 			renderer->vr_3d_renderer_draw_stereo(this);
+			
 	else
 		vr_3d_scene_draw_nodes(&camera->mvp);
 #else

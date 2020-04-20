@@ -48,7 +48,7 @@ bool vr3drenderer::vr_3d_renderer_stereo_init_from_hmd(vr3dhmd* hmd)
 void vr3drenderer::_create_fbo(GLuint* fbo, GLuint* color_tex, int width, int height)
 {
 	glGenFramebuffers(1, fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER_EXT, *fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, *fbo);
 	// 附加 color attachment
 	*color_tex = TextureHelper::makeAttachmentTexture(0, GL_RGB, width, height, GL_RGB, GL_UNSIGNED_BYTE); // 创建FBO中的纹理
 	
@@ -65,6 +65,7 @@ void vr3drenderer::_create_fbo(GLuint* fbo, GLuint* color_tex, int width, int he
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		printf("failed to create fbo %x\n", status);
 	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void vr3drenderer::_draw_eye(GLuint fbo, vr3dscene* scene, glm::mat4* mvp, glm::vec3* color)
@@ -81,28 +82,26 @@ void vr3drenderer::_draw_eye(GLuint fbo, vr3dscene* scene, glm::mat4* mvp, glm::
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glDisable(GL_DEPTH_TEST);
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 
 void vr3drenderer::_draw_framebuffers_on_planes()
 {
 	glm::mat4 projection_ortho;
-	//projection_ortho = glm::ortho(-filter_aspect, filter_aspect, 1.0f, -1.0f, -1.0f, 1.0f);
-	projection_ortho = glm::mat4();
+	projection_ortho = glm::ortho(-filter_aspect, filter_aspect, 1.0f, -1.0f, -1.0f, 1.0f);
+	//projection_ortho = glm::mat4();
 	shader->vr_3d_shader_upload_matrix("mvp", glm::value_ptr(projection_ortho));
 	render_plane->vr_3d_mesh_bind();
 
 	/* left framebuffer */
-	glViewport(0, 0, eye_width, eye_height);
+	glViewport(0, 0, eye_width/2, eye_height);
 	glBindTexture(GL_TEXTURE_2D, left_color_tex);
 	render_plane->vr_3d_mesh_draw();
 
 	/* right framebuffer */
-	/*glViewport(eye_width/2, 0, eye_width/2, eye_height);
+	glViewport(eye_width/2, 0, eye_width/2, eye_height);
 	glBindTexture(GL_TEXTURE_2D, right_color_tex);
-	render_plane->vr_3d_mesh_draw();*/
+	render_plane->vr_3d_mesh_draw();
 }
 
 void vr3drenderer::_draw_framebuffers_on_planes_shader_proj(vr3dcamera* cam)
@@ -177,31 +176,24 @@ void vr3drenderer::vr_3d_renderer_init_stereo_shader_proj(vr3dcamera* cam)
 
 void vr3drenderer::vr_3d_renderer_draw_stereo(vr3dscene* scene)
 {
-	/* aquire current fbo id */
-	/*GLint bound_fbo;
-	glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &bound_fbo);
-	if (bound_fbo == 0)
-		return;*/
-
 	vr3dcamera_hmd* hmd_cam = (vr3dcamera_hmd*)(scene->camera);
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-#if 0
+#if 1
 	/* left eye */
-	//_draw_eye(left_fbo, scene, &hmd_cam->left_vp_matrix);
+	_draw_eye(left_fbo, scene, &hmd_cam->left_vp_matrix, &(glm::vec3(0.18f, 0.04f, 0.14f)));
 
 	/* right eye */
-	//_draw_eye(right_fbo, scene, &hmd_cam->right_vp_matrix);
+	_draw_eye(right_fbo, scene, &hmd_cam->right_vp_matrix, &(glm::vec3(0.04f, 0.18f, 0.14f)));
 #else
 	glm::mat4 identiy = glm::mat4();	//TODO...先更新一个单位矩阵
 	_draw_eye(left_fbo, scene, &identiy, &(glm::vec3(0.18f, 0.04f, 0.14f)));
-	//_draw_eye(right_fbo, scene, &identiy, &(glm::vec3(0.0f, 0.00f, 0.0f)));
+	_draw_eye(right_fbo, scene, &identiy, &(glm::vec3(0.04f, 0.18f, 0.14f)));
 #endif // 0
 
 	scene->vr_3d_scene_clear_state();
 
 	shader->vr_3d_shader_bind();
-	//glBindFramebuffer(GL_FRAMEBUFFER, bound_fbo);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_draw_framebuffers_on_planes();

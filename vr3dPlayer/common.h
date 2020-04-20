@@ -19,7 +19,7 @@
 #pragma comment(lib, "SOIL.lib")
 
 
-//#define HAVE_OPENHMD
+#define HAVE_OPENHMD
 
 #endif // _COMMON_H_
 
