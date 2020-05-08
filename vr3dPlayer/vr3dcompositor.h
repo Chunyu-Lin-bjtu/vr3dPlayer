@@ -1,6 +1,7 @@
 ﻿#ifndef _VR_3D_COMPOSITOR_H_
 #define _VR_3D_COMPOSITOR_H_
 #include "common.h"
+#include "vr3dpbo.h"
 #include "vr3dscene.h"
 
 class vr3dcompositor
@@ -12,6 +13,8 @@ public:
 public:
 	bool vr_3d_compositor_init_scene();
 
+	bool vr_3d_compositor_init_texture();
+
 	bool vr_3d_compositor_update_texture(/*AVFrame* pictureYUV*/);
 
 	GLFWwindow* vr_3d_compositor_get_window();
@@ -20,11 +23,13 @@ public:
 
 private:
 	int vr_3d_compositor_init_gl_context();
+
 private:
 	vr3dscene* scene;
 	GLFWwindow* window;
 	int screen_w;
 	int screen_h;
+	vr3dpbo* pbo;
 	GLuint textureId1;
 };
 

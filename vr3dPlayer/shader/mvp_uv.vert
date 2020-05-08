@@ -9,7 +9,7 @@ out vec3 out_pos;
 
 void main()
 {
-   gl_Position = mvp * vec4(position, 1);
+   gl_Position = mvp * vec4(position, 1.0);
    out_uv = uv;
    out_pos = position;
 }

@@ -51,6 +51,12 @@
     <ClCompile Include="vr3dmath.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="vr3dpbo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vr3dmedia.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
@@ -96,6 +102,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="vr3dtexture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dpbo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vr3dmedia.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

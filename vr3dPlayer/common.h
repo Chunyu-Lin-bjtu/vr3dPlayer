@@ -17,7 +17,12 @@
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "glew32sd.lib")
 #pragma comment(lib, "SOIL.lib")
-
+#pragma comment(lib, "opencv_world343d.lib") //opencv debug 32
+#pragma comment(lib, "avformat")
+#pragma comment(lib, "avutil")
+#pragma comment(lib, "avcodec")
+#pragma comment(lib, "swscale")
+#pragma comment(lib, "swresample")
 
 #define HAVE_OPENHMD
 

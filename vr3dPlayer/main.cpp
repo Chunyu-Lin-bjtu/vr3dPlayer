@@ -21,7 +21,7 @@ int main()
 {
 	vr3dcompositor cp;
 	cp.vr_3d_compositor_init_scene();
-	cp.vr_3d_compositor_update_texture();
+	cp.vr_3d_compositor_init_texture();
 	
 	// 开始游戏主循环
 	GLFWwindow* window = cp.vr_3d_compositor_get_window();
