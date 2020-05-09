@@ -23,6 +23,7 @@
 #pragma comment(lib, "avcodec")
 #pragma comment(lib, "swscale")
 #pragma comment(lib, "swresample")
+#pragma comment(lib, "avdevice.lib")
 
 #define HAVE_OPENHMD
 
