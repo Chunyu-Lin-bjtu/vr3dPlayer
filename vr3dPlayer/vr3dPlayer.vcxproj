@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="net\vrLogger.cpp" />
+    <ClCompile Include="net\vrTcpSocket.cpp" />
     <ClCompile Include="vr3dcamera.cpp" />
     <ClCompile Include="vr3dcamera_arcball.cpp" />
     <ClCompile Include="vr3dcamera_hmd.cpp" />
@@ -163,10 +165,14 @@
     <ClCompile Include="vr3dpbo.cpp" />
     <ClCompile Include="vr3drenderer.cpp" />
     <ClCompile Include="vr3dscene.cpp" />
+    <ClCompile Include="vrencode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
     <ClInclude Include="glfwcallback.h" />
+    <ClInclude Include="net\vrLogger.h" />
+    <ClInclude Include="net\vrSocket.h" />
+    <ClInclude Include="net\vrTcpSocket.h" />
     <ClInclude Include="vr3dmedia.h" />
     <ClInclude Include="vr3dpbo.h" />
     <ClInclude Include="vr3dtexture.h" />
@@ -182,6 +188,7 @@
     <ClInclude Include="vr3drenderer.h" />
     <ClInclude Include="vr3dscene.h" />
     <ClInclude Include="vr3dshader.h" />
+    <ClInclude Include="vrencode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

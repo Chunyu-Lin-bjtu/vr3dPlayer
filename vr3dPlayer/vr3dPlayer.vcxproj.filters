@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\net">
+      <UniqueIdentifier>{9d5d138f-859e-4ab7-960c-21b6ccea53cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\net">
+      <UniqueIdentifier>{6132bc31-a44e-4439-b231-4deac2308ad4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,6 +62,15 @@
     </ClCompile>
     <ClCompile Include="vr3dmedia.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="vrencode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="net\vrTcpSocket.cpp">
+      <Filter>源文件\net</Filter>
+    </ClCompile>
+    <ClCompile Include="net\vrLogger.cpp">
+      <Filter>源文件\net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +124,18 @@
     </ClInclude>
     <ClInclude Include="vr3dmedia.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="vrencode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="net\vrSocket.h">
+      <Filter>头文件\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\vrTcpSocket.h">
+      <Filter>头文件\net</Filter>
+    </ClInclude>
+    <ClInclude Include="net\vrLogger.h">
+      <Filter>头文件\net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
