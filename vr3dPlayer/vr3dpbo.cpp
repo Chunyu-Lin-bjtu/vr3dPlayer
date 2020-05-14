@@ -9,7 +9,8 @@ vr3dpbo::vr3dpbo(GLuint w, GLuint h) :
 	memset(buf_pbo_2_memery, 0, data_size);
 	pixel_format = GL_RGB;
 
-	vdo = new vr3dmedia_opencv();
+	//vdo = new vr3dmedia_opencv();
+	vdo = new vr3dmedia_ffmpeg();
 }
 
 vr3dpbo::~vr3dpbo()
@@ -33,7 +34,8 @@ bool vr3dpbo::vr_3d_pbo_open_image_source(GLuint w, GLuint h)
 {
 	bool ret = false;
 	const char* name = "D:\\CPlusPlus\\流媒体工程\\ffmpeg\\3GlassFFmpeg\\video\\bbb_sunflower_1080p_60fps_normal.mp4";
-	ret = vdo->vr_3d_media_open_file(name, w, h);
+	//ret = vdo->vr_3d_media_open_file(name, w, h);
+	ret = vdo->vr_3d_media_open_screen(w, h);
 	if (!ret) {
 		std::cerr << "vr_3d_compositor_init_scene::opencv can not open video.  " << name << std::endl;
 		char waitKey;

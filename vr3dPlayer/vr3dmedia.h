@@ -9,10 +9,13 @@ using namespace std;
 
 extern "C"
 {
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-#include "libswresample/swresample.h"
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+#include <libavfilter/avfilter.h>
+#include <libavdevice/avdevice.h>
+#include <libswresample/swresample.h>
+#include <libswscale/swscale.h>
+#include <libavutil/avutil.h>
 #include "libavutil/imgutils.h"
 #include "libavutil/pixdesc.h"
 };
@@ -22,18 +25,18 @@ extern "C"
 
 typedef enum {
 
-	vr3dMovieErrorNone,
-	vr3dMovieErrorOpenFile,
-	vr3dMovieErrorStreamInfoNotFound,
-	vr3dMovieErrorStreamNotFound,
-	vr3dMovieErrorCodecNotFound,
-	vr3dMovieErrorOpenCodec,
-	vr3dMovieErrorAllocateFrame,
-	vr3dMovieErroSetupScaler,
-	vr3dMovieErroReSampler,
-	vr3dMovieErroUnsupported,
+	vrMediaErrorNone,
+	vrMediaErrorOpenFile,
+	vrMediaErrorStreamInfoNotFound,
+	vrMediaErrorStreamNotFound,
+	vrMediaErrorCodecNotFound,
+	vrMediaErrorOpenCodec,
+	vrMediaErrorAllocateFrame,
+	vrMediaErroSetupScaler,
+	vrMediaErroReSampler,
+	vrMediaErroUnsupported,
 
-} vr3dMovieError;
+} vrMediaError;
 
 class vr3dmedia
 {
@@ -43,7 +46,7 @@ public:
 
 public:
 	virtual bool vr_3d_media_open_file(const char* path, int w, int h, int* perror = nullptr) = 0;
-
+	virtual bool vr_3d_media_open_screen(int w, int h, int* perror = nullptr) = 0;
 	virtual void vr_3d_media_init_rgb24() = 0;
 
 	virtual double vr_3d_media_get_frame_count() = 0;
@@ -66,13 +69,45 @@ public:
 
 public:
 	virtual bool vr_3d_media_open_file(const char* path, int w, int h, int* perror = nullptr);
+	virtual bool vr_3d_media_open_screen(int w, int h, int* perror = nullptr);
 	virtual void vr_3d_media_init_rgb24();
 	virtual double vr_3d_media_get_frame_count();
 	virtual double vr_3d_media_get_fps();
 	virtual bool vr_3d_media_get_next_frame(unsigned char* buf);
 
 private:
+	// 初始化ffmpeg context，打开path指定的媒体文件
+	vrMediaError vr_media_ffmpeg_open_input(const char* path);
+	// 
+	vrMediaError vr_media_ffmpeg_open_video_stream();
+	vrMediaError vr_media_ffmpeg_open_audio_stream();
 
+	vrMediaError vr_media_ffmpeg_open_video_stream_by_idx();
+	vrMediaError vr_media_ffmpeg_open_audio_stream_by_idx();
+
+public:
+	// 查找指定媒体类型的数据
+	static unsigned int vr_media_ffmpeg_collect_streams_idx(AVFormatContext* fmt_ctx, AVMediaType codec_type);
+private:
+	AVFormatContext* fmt_ctx;
+	AVStream* video_stream;
+	AVCodecContext* video_codec_ctx;
+	AVCodec* video_decoder;
+	AVFrame* av_frame;
+	AVFrame* gl_frame;
+	AVPacket* packet;
+	struct SwsContext* sws_ctx;
+	int              video_streams_idx;
+	int              audio_streams_idx;
+
+	char* _path;
+
+	AVStream* audio_stream;
+	AVCodecContext* audio_codec_ctx;
+	AVCodec* audio_decoder;
+
+	int resize_width, resize_height;
+	int frame_size;
 };
 
 class vr3dmedia_opencv : public vr3dmedia
@@ -83,6 +118,7 @@ public:
 
 public:
 	virtual bool vr_3d_media_open_file(const char* path, int w, int h, int* perror = nullptr);
+	virtual bool vr_3d_media_open_screen(int w, int h, int* perror = nullptr);
 	virtual void vr_3d_media_init_rgb24();
 	virtual double vr_3d_media_get_frame_count();
 	virtual double vr_3d_media_get_fps();
@@ -91,49 +127,6 @@ private:
 	cv::VideoCapture _cap;
 	int resize_width, resize_height;
 	int frame_size;
-};
-
-
-
-
-class vr3dmoviedecoder
-{
-public:
-	vr3dmoviedecoder();
-	~vr3dmoviedecoder();
-
-public:
-	// 打开路径指定的媒体文件，perror返回错误码
-	bool vr_3d_movie_decoder_open_file(const char* path, int* perror);
-
-	// 初始化ffmpeg context，打开path指定的媒体文件
-	vr3dMovieError vr_3d_movie_decoder_open_input(const char* path);
-
-	vr3dMovieError vr_3d_movie_decoder_open_video_stream_by_idx(unsigned int idx);
-	// 
-	vr3dMovieError vr_3d_movie_decoder_open_video_stream();
-
-public:// static 
-	
-	// 查找指定媒体类型的数据
-	static vector<unsigned int> vr_3d_movie_decoder_collect_streams_idx(AVFormatContext* fmt_ctx, AVMediaType codec_type);
-
-private:
-	char* _path;
-
-
-	AVCodecContext*  _video_codec_ctx;
-	AVFormatContext* _fmt_ctx;
-	AVFrame* _video_frame;
-	int      _video_stream_idx;
-
-	vector<unsigned int> _video_streams_idx;
-
-
-
-	float _sampleRate;
-	int   _frameWidth;
-	int   _frameHeight;
 };
 
 #endif // !_VR_3D_MOVIE_DECODER_H_

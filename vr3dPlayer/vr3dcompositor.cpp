@@ -60,6 +60,10 @@ vr3dcompositor::vr3dcompositor()
 
 vr3dcompositor::~vr3dcompositor()
 {
+	if (scene) {
+		delete scene;
+		scene = nullptr;
+	}
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
 }

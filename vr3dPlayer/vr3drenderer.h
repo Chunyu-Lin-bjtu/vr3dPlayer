@@ -10,6 +10,7 @@
 #endif
 
 class vr3dscene;
+class vrEncodeH264;
 class vr3drenderer
 {
 public:
@@ -47,6 +48,8 @@ public:
 	int eye_height;
 
 	float filter_aspect;
+
+	vrEncodeH264* eh264;
 };
 
 

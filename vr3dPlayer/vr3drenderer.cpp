@@ -5,9 +5,11 @@
 #include "vr3dscene.h"
 #include "vr3dtexture.h"
 
+#include "vrencode.h"
+
 vr3drenderer::vr3drenderer()
 {
-	this->shader = NULL;
+	this->shader = nullptr;
 	this->left_color_tex = 0;
 	this->left_fbo = 0;
 	this->right_color_tex = 0;
@@ -15,10 +17,16 @@ vr3drenderer::vr3drenderer()
 	this->eye_width = 1;
 	this->eye_height = 1;
 	this->filter_aspect = 1.0f;
+
+	eh264 = nullptr;
 }
 
 vr3drenderer::~vr3drenderer()
 {
+	if (eh264) {
+		delete eh264;
+		eh264 = nullptr;
+	}
 }
 
 #ifdef HAVE_OPENHMD
@@ -35,6 +43,10 @@ bool vr3drenderer::vr_3d_renderer_stereo_init_from_hmd(vr3dhmd* hmd)
 #else
 	eye_width = 960;
 	eye_height = 540;
+
+	eh264 = new vrEncodeH264(eye_width, eye_height, 60);
+	eh264->vr_encode_h264_from_framebuffer_map(2, "rgb.mp4");
+
 #endif // 0
 	
 	
@@ -102,6 +114,8 @@ void vr3drenderer::_draw_framebuffers_on_planes()
 	glViewport(eye_width/2, 0, eye_width/2, eye_height);
 	glBindTexture(GL_TEXTURE_2D, right_color_tex);
 	render_plane->vr_3d_mesh_draw();
+
+	eh264->vr_encode_h264_run_framebuffer_map();
 }
 
 void vr3drenderer::_draw_framebuffers_on_planes_shader_proj(vr3dcamera* cam)

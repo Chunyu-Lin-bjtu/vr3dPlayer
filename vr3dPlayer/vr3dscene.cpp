@@ -24,6 +24,10 @@ vr3dscene::vr3dscene(vr3dcamera* cam, void (*_init_func) (vr3dscene*))
 
 vr3dscene::~vr3dscene()
 {
+	if (renderer) {
+		delete renderer;
+		renderer = nullptr;
+	}
 	nodes.clear();
 }
 
